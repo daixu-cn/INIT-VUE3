@@ -1,0 +1,19 @@
+$z-layer: (
+  "dropdown": 1000,
+  "sticky": 1020,
+  "fixed": 1030,
+  "modal-backdrop": 1040,
+  "offcanvas": 1050,
+  "modal": 1060,
+  "popover": 1070,
+  "tooltip": 1080
+);
+
+@function z-index($key) {
+  @if not map-has-key($z-layer, $key) {
+    @warn "No layer found for `#{$key}` in $z-layer map. Property omitted.";
+    @return null;
+  }
+
+  @return map-get($z-layer, $key);
+}

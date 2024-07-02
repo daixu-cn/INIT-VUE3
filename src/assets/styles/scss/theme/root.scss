@@ -1,0 +1,13 @@
+@import "@/assets/styles/scss/theme/light";
+@import "@/assets/styles/scss/theme/dark";
+
+:root {
+  --dx-font-size: 15px;
+  --dx-font-family: "JetBrains Mono", Inter, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+
+  --dx-space: 12px;
+  --dx-border-radius: 6px;
+  --dx-duration: 0.3s;
+}
