@@ -56,6 +56,13 @@ class HTTP {
 
         // 登录过期/Token异常
         if (AUTH_ERROR_CODES.has(code)) {
+          if (requestConfig.skipAuth) {
+            const errorMessage = this.normalizeMessage(message)
+            if (!requestConfig.skipErrorHandler) snackbar.error(errorMessage)
+            return Promise.reject(
+              new AxiosError(errorMessage, undefined, requestConfig, response.request, response),
+            )
+          }
           return this.retryWithRefresh(response, this.normalizeMessage(message))
         }
 
@@ -82,6 +89,11 @@ class HTTP {
 
         const response = error?.response as AxiosResponse<Model.Base.Response> | undefined
         if (response && AUTH_ERROR_CODES.has(response.status)) {
+          if (requestConfig?.skipAuth) {
+            error.message = this.normalizeMessage(response.data?.message)
+            if (!requestConfig.skipErrorHandler) snackbar.error(error.message)
+            return Promise.reject(error)
+          }
           return this.retryWithRefresh(response)
         }
 
@@ -123,18 +135,26 @@ class HTTP {
 
   private async refreshAccessToken() {
     if (!this.refreshTokenPromise) {
+      const refreshToken = useStore().user.refreshToken
       this.refreshTokenPromise = this.refreshInstance
         .post<
-          Model.Base.Response<string>,
-          AxiosResponse<Model.Base.Response<string>>,
+          Model.Base.Response<Model.Auth.Data>,
+          AxiosResponse<Model.Base.Response<Model.Auth.Data>>,
           Record<string, never>
-        >("/auth/refresh", {}, { withCredentials: true })
+        >(
+          "/auth/refresh",
+          {},
+          {
+            headers: refreshToken ? { Authorization: `Bearer ${refreshToken}` } : undefined,
+            withCredentials: true,
+          },
+        )
         .then(response => {
           const { code, data, message } = response.data
           if (code !== SUCCESS_CODE) throw new Error(this.normalizeMessage(message))
 
-          useStore().user.setToken(data)
-          return data
+          useStore().user.setSession(data)
+          return data.accessToken
         })
         .finally(() => {
           this.refreshTokenPromise = null
@@ -152,8 +172,8 @@ class HTTP {
       snackbar.error(message)
     }
 
-    if (router.currentRoute.value.name !== "Login") {
-      router.replace({ name: "Login" }).catch(() => undefined)
+    if (router.currentRoute.value.name !== "AdminLogin") {
+      router.replace({ name: "AdminLogin" }).catch(() => undefined)
     }
   }
 

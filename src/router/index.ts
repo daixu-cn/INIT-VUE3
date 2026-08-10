@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from "vue-router"
 import { BASE_URL } from "@/global/env"
 import routes from "@/router/routes"
 import useStore from "@/store"
-import { hasPermission } from "@/tools/permission"
 import { setProgress, setTitle } from "@/tools/router"
 
 const router = createRouter({
@@ -19,8 +18,14 @@ const router = createRouter({
 router.beforeEach(to => {
   setProgress()
 
-  if (to.meta.auth && (!useStore().user.token || !hasPermission(to.meta.permission ?? to.path))) {
-    return { name: "Login" }
+  const { user } = useStore()
+  if (user.token === "demo-admin") user.reset()
+  if (to.meta.auth && (!user.token || user.info?.role !== "ADMIN")) {
+    return { name: "AdminLogin", query: { redirect: to.fullPath } }
+  }
+
+  if (to.name === "AdminLogin" && user.token && user.info?.role === "ADMIN") {
+    return { name: "AdminReports" }
   }
 
   return true

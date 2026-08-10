@@ -1,17 +1,70 @@
-@import "./tailwind/tailwind";
-
 @import "./vendors/nprogress";
-
 @import "./animations/page-transition";
 
-html {
+:root {
+  color: #15201e;
+  background: #f6f5f1;
+  font-family:
+    Inter,
+    "SF Pro Display",
+    "PingFang SC",
+    "Microsoft YaHei",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  scrollbar-color: #63a99a #081311;
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in oklch, var(--color-gray-950), transparent 50%) transparent;
-  /* 1rem = 16px */
-  font-size: clamp(14px, 0.4167vw + 0.5rem, 16px);
-  @apply scroll-smooth;
+}
 
-  body {
-    @apply bg-white font-sans text-base leading-none text-gray-700 transition-colors duration-300 dark:bg-gray-800 dark:text-gray-200;
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #63a99a;
+  outline-offset: 3px;
+}
+
+::selection {
+  background: #63a99a;
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }

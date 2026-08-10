@@ -2,16 +2,34 @@ declare namespace Model {
   namespace Auth {
     /** 登录数据 */
     interface Data {
-      token: string
+      accessToken: string
+      accessExpiresIn: number
+      refreshToken: string
+      refreshExpiresIn: number
       user: Model.User.Data
-      permissions: string[]
+    }
+
+    interface EmailLinkRequest {
+      expiresIn: number
+      pollToken: string
+      requestId: string
+      resendAfter: number
+      session?: Data
+    }
+
+    interface EmailLinkStatus {
+      status: "PENDING" | "CONFIRMED" | "EXPIRED"
+      session?: Data
     }
 
     namespace Params {
-      /** 登录参数 */
-      interface Login {
-        username: string
-        password: string
+      interface EmailLinkRequest {
+        email: string
+      }
+
+      interface EmailLinkStatus {
+        pollToken: string
+        requestId: string
       }
     }
   }

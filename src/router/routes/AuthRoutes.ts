@@ -2,10 +2,10 @@ import type { RouteRecordRaw } from "vue-router"
 
 const AuthRoutes: Readonly<RouteRecordRaw[]> = [
   {
-    path: "/login",
-    name: "Login",
-    component: () => import("@/views/Auth/Login/Login.vue"),
-    meta: { title: "登录" },
+    path: "/admin/login",
+    name: "AdminLogin",
+    component: () => import("@/views/Admin/Login.vue"),
+    meta: { title: "管理员登录 · Echo" },
   },
 ]
 

@@ -1,5 +1,5 @@
 <template>
-  <v-app :theme="theme.dark ? 'dark' : 'light'">
+  <v-app>
     <AppRouterView />
 
     <AppSnackbar />
@@ -8,7 +8,4 @@
 
 <script setup lang="ts">
 import AppRouterView from "@/components/AppRouterView/AppRouterView.vue"
-import useStore from "@/store"
-
-const { theme } = useStore()
 </script>

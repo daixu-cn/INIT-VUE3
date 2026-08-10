@@ -1,41 +1,31 @@
 #app-load-loading {
   position: fixed;
   inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-items: center;
+  background: #081311;
 }
 
-#app-load-loading .app-load-icon {
-  width: 205px;
-  height: 120px;
-  display: inline-block;
-  vertical-align: middle;
+#app-load-loading img {
+  width: 72px;
+  filter: invert(1);
+  animation: app-load-pulse 1.5s ease-in-out infinite;
 }
 
-#app-load-loading .app-load-icon path {
-  stroke: cyan;
-  stroke-width: 6;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  stroke-dasharray: 193.904983521;
-  fill: none;
-  animation:
-    app-load-animation 4s linear infinite,
-    app-load-color-animation 3s linear infinite;
-}
-
-@keyframes app-load-animation {
-  from {
-    stroke-dashoffset: 775.6199340820312;
+@keyframes app-load-pulse {
+  0%,
+  100% {
+    opacity: 0.36;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-@keyframes app-load-color-animation {
-  33% {
-    stroke: yellow;
-  }
-  66% {
-    stroke: magenta;
+@media (prefers-reduced-motion: reduce) {
+  #app-load-loading img {
+    animation: none;
   }
 }
