@@ -14,6 +14,12 @@ const AdminRoutes: Readonly<RouteRecordRaw[]> = [
         meta: { title: "举报处理 · Echo 管理后台", auth: true },
       },
       {
+        path: "feedback",
+        name: "AdminFeedback",
+        component: () => import("@/views/Admin/Feedback.vue"),
+        meta: { title: "意见与反馈 · Echo 管理后台", auth: true },
+      },
+      {
         path: "app-operations",
         name: "AdminAppOperations",
         component: () => import("@/views/Admin/AppOperations.vue"),

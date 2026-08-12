@@ -11,6 +11,10 @@
           <AppIcon :path="mdiAlertOctagonOutline" />
           <span>举报处理</span>
         </RouterLink>
+        <RouterLink to="/admin/feedback" @click="menuOpen = false">
+          <AppIcon :path="mdiMessageTextOutline" />
+          <span>意见与反馈</span>
+        </RouterLink>
         <RouterLink to="/admin/app-operations" @click="menuOpen = false">
           <AppIcon :path="mdiCogOutline" />
           <span>应用运维</span>
@@ -37,7 +41,13 @@
 </template>
 
 <script setup lang="ts">
-import { mdiAlertOctagonOutline, mdiClose, mdiCogOutline, mdiMenu } from "@mdi/js"
+import {
+  mdiAlertOctagonOutline,
+  mdiClose,
+  mdiCogOutline,
+  mdiMenu,
+  mdiMessageTextOutline,
+} from "@mdi/js"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 

@@ -300,8 +300,8 @@
     <footer class="site-footer">
       <img :src="BRAND_WORDMARK_URL" alt="Echo" />
       <nav :aria-label="t.footerNavigationLabel">
-        <a href="#">{{ t.privacyPolicy }}</a>
-        <a href="#">{{ t.terms }}</a>
+        <RouterLink to="/privacy">{{ t.privacyPolicy }}</RouterLink>
+        <RouterLink to="/terms">{{ t.terms }}</RouterLink>
         <a href="mailto:support@yygo.tv">{{ t.aboutUs }}</a>
         <RouterLink to="/admin/login">{{ t.admin }}</RouterLink>
       </nav>
