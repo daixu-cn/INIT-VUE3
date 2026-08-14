@@ -1,0 +1,12 @@
+{
+  "src/assets/styles/css/main.css": 4,
+  "src/assets/styles/css/vendors/app-load-loading.css": 1,
+  "src/components/VoiceWave.vue": 1,
+  "src/views/Admin/AppOperations.vue": 39,
+  "src/views/Admin/Feedback.vue": 70,
+  "src/views/Admin/Layout.vue": 14,
+  "src/views/Admin/Login.vue": 36,
+  "src/views/Admin/Reports.vue": 56,
+  "src/views/Main/Home/Home.vue": 66,
+  "src/views/Main/Legal/LegalDocument.vue": 15
+}

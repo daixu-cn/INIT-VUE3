@@ -6,8 +6,6 @@ declare module "vue-router" {
     title?: string
     /** 当前路由是否需要校验权限 */
     auth?: boolean
-    /** 当前路由权限路径，默认匹配路由 path，针对传参路由设置 */
-    permission?: string
     /**
      * 是否缓存当前页面
      *

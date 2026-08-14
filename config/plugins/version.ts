@@ -1,8 +1,8 @@
 import type { Plugin } from "vite"
 
-import { exec } from "child_process"
-import fs from "fs"
-import path from "path"
+import { exec } from "node:child_process"
+import fs from "node:fs"
+import path from "node:path"
 
 export default function (): Plugin {
   return {
@@ -10,7 +10,7 @@ export default function (): Plugin {
     buildStart() {
       exec("git log -1 --pretty=format:'%H %cd' --date=iso-strict", (err, stdout) => {
         fs.writeFile(
-          path.join(__dirname, "../../public/version.json"),
+          path.join(import.meta.dirname, "../../public/version.json"),
           JSON.stringify({ version: stdout.trim() }),
           "utf8",
           () => {},

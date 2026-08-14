@@ -1,7 +1,7 @@
 import { fileURLToPath, URL } from "node:url"
 import { defineConfig, loadEnv } from "vite"
 
-import { build, css, plugins } from "./config"
+import { build, css, plugins } from "./config/index.ts"
 
 export default defineConfig(config => {
   // const PROD = config.mode === "production"

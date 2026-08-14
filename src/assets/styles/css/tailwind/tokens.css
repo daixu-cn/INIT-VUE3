@@ -1,4 +1,7 @@
 @theme {
+  --color-echo-accent: #63a99a;
+  --color-admin-accent: #168e93;
+
   --color-primary-50: oklch(0.95 0.051 179.8);
   --color-primary-100: oklch(0.933 0.071 179.8);
   --color-primary-200: oklch(0.916 0.091 179.8);

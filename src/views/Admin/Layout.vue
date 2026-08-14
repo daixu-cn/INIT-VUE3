@@ -121,7 +121,7 @@ async function handleLogout() {
 }
 
 .admin-sidebar nav a.router-link-active {
-  background: #168e93;
+  background: var(--color-admin-accent);
   color: #fff;
 }
 
@@ -143,7 +143,7 @@ async function handleLogout() {
 }
 
 .admin-topbar > strong {
-  color: #168e93;
+  color: var(--color-admin-accent);
   font-size: 16px;
 }
 
@@ -168,7 +168,7 @@ async function handleLogout() {
 
 .admin-actions a:hover,
 .admin-actions button:hover {
-  color: #168e93;
+  color: var(--color-admin-accent);
 }
 
 .menu-toggle {
@@ -206,7 +206,7 @@ async function handleLogout() {
     border: 1px solid #d8dfe1;
     border-radius: 4px;
     background: #fff;
-    color: #168e93;
+    color: var(--color-admin-accent);
   }
 
   .admin-topbar > strong,

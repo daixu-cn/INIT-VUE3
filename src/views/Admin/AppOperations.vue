@@ -489,7 +489,7 @@ function formatShanghai(value: string) {
   color: #536164;
 }
 .primary {
-  background: #168e93;
+  background: var(--color-admin-accent);
   color: #fff;
 }
 button:disabled {
@@ -522,7 +522,7 @@ button:disabled {
 .eyebrow {
   display: block;
   margin-bottom: 4px;
-  color: #168e93;
+  color: var(--color-admin-accent);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -566,7 +566,7 @@ button:disabled {
 .toggle-row input {
   width: 20px;
   height: 20px;
-  accent-color: #168e93;
+  accent-color: var(--color-admin-accent);
 }
 .form-grid,
 .copy-grid {
@@ -611,7 +611,7 @@ textarea {
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: #168e93;
+  border-color: var(--color-admin-accent);
   outline: 2px solid rgb(22 142 147 / 12%);
 }
 .card-description {
@@ -645,7 +645,7 @@ select:focus {
   background: #fafcfc;
 }
 .preview-grid strong {
-  color: #168e93;
+  color: var(--color-admin-accent);
   font-size: 12px;
 }
 .preview-grid h3 {
@@ -722,7 +722,7 @@ fieldset label + label {
 }
 legend {
   padding: 0 7px;
-  color: #168e93;
+  color: var(--color-admin-accent);
   font-size: 13px;
   font-weight: 800;
 }

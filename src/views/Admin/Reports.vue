@@ -370,8 +370,8 @@ onMounted(() => loadReports(true))
 }
 
 .query-button {
-  border: 1px solid #168e93;
-  background: #168e93;
+  border: 1px solid var(--color-admin-accent);
+  background: var(--color-admin-accent);
   color: #fff;
 }
 
@@ -550,7 +550,7 @@ onMounted(() => loadReports(true))
 }
 
 .table-state .app-icon {
-  color: #63a99a;
+  color: var(--color-echo-accent);
   font-size: 1.6rem;
 }
 
@@ -688,8 +688,8 @@ onMounted(() => loadReports(true))
   color: #9b4b40;
 }
 .resolve-action {
-  border: 1px solid #63a99a;
-  background: #63a99a;
+  border: 1px solid var(--color-echo-accent);
+  background: var(--color-echo-accent);
   color: #fff;
 }
 

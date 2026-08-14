@@ -4,8 +4,7 @@ declare namespace Model {
     interface Data {
       userId: string
       email: string
-      role: "ADMIN" | "USER"
-      userName?: string
+      role: "ADMIN" | "OFFICIAL" | "USER"
     }
 
     namespace Params {}

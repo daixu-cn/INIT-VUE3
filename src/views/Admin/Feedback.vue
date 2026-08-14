@@ -569,7 +569,7 @@ onMounted(() => loadFeedback(true))
 .query-bar input:focus,
 .query-bar select:focus,
 .reply-field textarea:focus {
-  border-color: #168e93;
+  border-color: var(--color-admin-accent);
   box-shadow: 0 0 0 2px rgb(22 142 147 / 10%);
 }
 .query-button,
@@ -587,8 +587,8 @@ onMounted(() => loadFeedback(true))
   white-space: nowrap;
 }
 .query-button {
-  border: 1px solid #168e93;
-  background: #168e93;
+  border: 1px solid var(--color-admin-accent);
+  background: var(--color-admin-accent);
   color: #fff;
 }
 .reset-button,
@@ -709,7 +709,7 @@ button:disabled {
 }
 .table-state .app-icon {
   font-size: 28px;
-  color: #168e93;
+  color: var(--color-admin-accent);
 }
 .load-more {
   display: flex;
@@ -869,8 +869,8 @@ button:disabled {
   color: #526063;
 }
 .reply-action {
-  border: 1px solid #168e93;
-  background: #168e93;
+  border: 1px solid var(--color-admin-accent);
+  background: var(--color-admin-accent);
   color: #fff;
 }
 .reply-result {

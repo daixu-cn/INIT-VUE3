@@ -1,4 +1,3 @@
-import "@/plugins/dayjs"
 import "@/plugins/check-update"
 import app from "@/global/app"
 import { setupI18n } from "@/plugins/locale"

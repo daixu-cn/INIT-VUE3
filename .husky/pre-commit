@@ -1,1 +1,1 @@
-npm run prettier && npm run lint
+pnpm quality

@@ -1,3 +1,4 @@
+@import "./tailwind/tailwind.css";
 @import "./vendors/nprogress";
 @import "./animations/page-transition";
 
@@ -15,7 +16,7 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  scrollbar-color: #63a99a #081311;
+  scrollbar-color: var(--color-echo-accent) #081311;
   scrollbar-width: thin;
 }
 
@@ -54,12 +55,12 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid #63a99a;
+  outline: 2px solid var(--color-echo-accent);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: #63a99a;
+  background: var(--color-echo-accent);
   color: #fff;
 }
 
