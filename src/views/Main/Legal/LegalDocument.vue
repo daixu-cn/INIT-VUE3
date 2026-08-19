@@ -87,47 +87,19 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue"
 
 import { BRAND_WORDMARK_URL } from "@/global/env"
 
-type DocumentKind = "privacy" | "terms"
-type Locale = "en" | "zh"
-
-interface LegalSection {
-  id: string
-  number: string
-  title: string
-  paragraphs: string[]
-  bullets?: string[]
-}
-
-interface LegalCopy {
-  title: string
-  summary: string
-  lastUpdatedLabel: string
-  lastUpdated: string
-  contentsLabel: string
-  backHome: string
-  relatedPath: `/${DocumentKind}`
-  relatedLabel: string
-  contactEyebrow: string
-  contactTitle: string
-  contactBody: string
-  footerLabel: string
-  privacyLink: string
-  termsLink: string
-  footerNote: string
-  sections: LegalSection[]
-}
+import type { DocumentKind, LegalCopy, LegalLocale } from "./legal-types"
 
 const props = defineProps<{ documentType: DocumentKind }>()
-const locale = ref<Locale>("zh")
+const locale = ref<LegalLocale>("zh")
 const previousDocumentLanguage = ref("")
 
-const documents: Record<DocumentKind, Record<Locale, LegalCopy>> = {
+const documents: Record<DocumentKind, Record<LegalLocale, LegalCopy>> = {
   terms: {
     zh: {
       title: "服务条款",
       summary: "使用 Echo 前，请花一点时间了解你与 Echo 之间的约定。",
       lastUpdatedLabel: "最后更新",
-      lastUpdated: "2026 年 8 月 12 日",
+      lastUpdated: "2026 年 8 月 19 日",
       contentsLabel: "本页内容",
       backHome: "返回首页",
       relatedPath: "/privacy",
@@ -189,8 +161,11 @@ const documents: Record<DocumentKind, Record<Locale, LegalCopy>> = {
           title: "订阅、购买与退款",
           paragraphs: [
             "Echo 的部分功能可能需要订阅或购买点数。价格、计费周期、自动续订和可用权益会在购买页面或相关应用商店页面展示，并以你确认购买时显示的内容为准。",
-            "通过 Apple App Store 或 Google Play 发起的交易，还受相应应用商店的付款条款、退款规则和订阅管理机制约束。你可以在购买平台管理或取消订阅；取消通常不会撤销当前计费周期已生效的权益。",
-            "如果购买状态、权益发放或退款出现问题，请先通过购买平台的订单渠道处理，并可同时联系我们协助核查。",
+            "通过 Apple App Store 或 Google Play 发起的交易，还受相应应用商店的付款条款、退款规则和订阅管理机制约束。退款是否批准由相应应用商店决定；Echo 不承诺拒绝任何合法退款，也不能替代应用商店作出退款决定。",
+            "“永久点数”表示点数本身不过期，不表示在原购买被退款、撤销或发生拒付后仍不可撤销。退款获批后，与该购买对应且尚未使用的点数、未开始的服务预留和可追回的数字资产会被收回；已实际消费或无法追回的部分可能形成退款欠点，并限制点数消费、AI 生成、发布、更新、赠送和创作者变现，直至欠点及支付复核处理完成。登录、查看已有数据、导出和注销账号仍然保留。",
+            "点数赠送有 3 天待结算期，结算前不会进入收礼人的可用钱包，原购买退款时可被部分或全部撤销。结算后只追回收礼人尚未使用的对应赠送点数；无过错收礼人不会因付款人的同一笔损失产生欠点。退款撤销时，恢复的价值返还原付款人，不会自动重演此前的赠送关系。",
+            "普通取消会员但未退款时，会员权益持续到已支付周期结束。会员退款或撤销会终止剩余会员权益和未来每日赠点，但不会追回过去已正常领取或消费的会员点；退款被撤销后，仅恢复剩余有效期和之后的权益。",
+            "只有经 Apple 或 Google 验证的新现金点数购买会优先偿还退款欠点，赠送点、会员点、每日点和普通管理员赠点不会抵扣。未交付、系统错误、盗刷以及适用法律强制保障的情形，可联系我们复核和纠正。",
           ],
         },
         {
@@ -236,7 +211,7 @@ const documents: Record<DocumentKind, Record<Locale, LegalCopy>> = {
       summary:
         "Please take a moment to understand the agreement between you and Echo before using the service.",
       lastUpdatedLabel: "Last updated",
-      lastUpdated: "August 12, 2026",
+      lastUpdated: "August 19, 2026",
       contentsLabel: "On this page",
       backHome: "Back home",
       relatedPath: "/privacy",
@@ -299,8 +274,11 @@ const documents: Record<DocumentKind, Record<Locale, LegalCopy>> = {
           title: "Subscriptions, purchases, and refunds",
           paragraphs: [
             "Some Echo features may require a subscription or point purchase. Prices, billing periods, renewal behavior, and included benefits are shown at checkout or in the relevant app-store listing and apply as displayed when you confirm the purchase.",
-            "Transactions made through the Apple App Store or Google Play are also subject to the applicable store's payment terms, refund rules, and subscription-management tools. You can manage or cancel a subscription through the platform where you purchased it; cancellation generally does not remove benefits already active for the current billing period.",
-            "For purchase, entitlement, or refund issues, contact the relevant store first and contact us as needed so we can help investigate.",
+            "Transactions made through the Apple App Store or Google Play are also subject to that store's payment terms, refund rules, and subscription-management tools. The relevant store decides whether to approve a refund. Echo does not promise to reject a lawful refund and cannot replace the store's decision.",
+            "“Permanent points” means that the points do not expire; it does not make them irrevocable after the underlying purchase is refunded, reversed, or charged back. After an approved refund, unused points, unstarted service reservations, and recoverable digital assets associated with that purchase may be reclaimed. Consumed or unrecoverable value may become point debt and restrict point spending, AI generation, publishing, updates, gifting, and creator monetization until the debt and any payment review are resolved. Sign-in, viewing existing data, export, and account deletion remain available.",
+            "Point gifts have a three-day pending settlement period and do not enter the recipient's spendable wallet before settlement. If the original purchase is refunded, a pending gift may be partly or fully reversed. After settlement, only the recipient's unspent points from that gift are reclaimed; an innocent recipient does not incur debt for the payer's same loss. If the refund itself is reversed, restored value goes to the original payer and does not recreate prior gifts.",
+            "Canceling a membership without a refund leaves benefits active through the paid period. A membership refund or revocation ends remaining benefits and future daily grants, but does not reclaim membership points already normally granted or spent. If the refund is reversed, only the remaining term and future benefits are restored.",
+            "Only a new cash point purchase verified by Apple or Google automatically repays refund debt. Gifts, membership points, daily points, and ordinary administrative grants do not. Contact us for review of non-delivery, system error, unauthorized purchases, or rights guaranteed by applicable law.",
           ],
         },
         {
@@ -347,7 +325,7 @@ const documents: Record<DocumentKind, Record<Locale, LegalCopy>> = {
       title: "隐私政策",
       summary: "我们希望你清楚知道 Echo 收集哪些信息、为什么需要，以及你可以如何管理它们。",
       lastUpdatedLabel: "最后更新",
-      lastUpdated: "2026 年 8 月 12 日",
+      lastUpdated: "2026 年 8 月 19 日",
       contentsLabel: "本页内容",
       backHome: "返回首页",
       relatedPath: "/terms",
@@ -409,6 +387,7 @@ const documents: Record<DocumentKind, Record<Locale, LegalCopy>> = {
           bullets: [
             "与为 Echo 提供云基础设施、身份验证、消息发送、语音处理、内容存储、分析或客户支持的服务商共享。",
             "与 Apple App Store、Google Play 等平台共享完成购买验证和权益同步所需的信息。",
+            "只有在你于设置中明确授权时，Echo 才会在应用商店退款审核期间共享最低限度的交付状态、消费比例和业务使用记录。该开关默认关闭、可随时撤销，不影响购买；首版不会为此发送 IP 地址或精确位置。",
             "在法律要求、保护用户和公众安全、调查滥用或维护 Echo 权利时，向监管机构、执法机关或专业顾问提供必要信息。",
             "在合并、收购、融资或资产转让等公司交易中，按照法律要求采取适当保护措施后转移相关信息。",
           ],
@@ -465,7 +444,7 @@ const documents: Record<DocumentKind, Record<Locale, LegalCopy>> = {
       summary:
         "We want you to understand what Echo collects, why it is needed, and how you can manage it.",
       lastUpdatedLabel: "Last updated",
-      lastUpdated: "August 12, 2026",
+      lastUpdated: "August 19, 2026",
       contentsLabel: "On this page",
       backHome: "Back home",
       relatedPath: "/terms",
@@ -528,6 +507,7 @@ const documents: Record<DocumentKind, Record<Locale, LegalCopy>> = {
           bullets: [
             "With providers that support Echo infrastructure, authentication, messaging, voice processing, content storage, analytics, or customer support.",
             "With Apple App Store, Google Play, and similar platforms as needed to verify purchases and synchronize entitlements.",
+            "Only if you expressly opt in through Settings may Echo share minimal delivery status, consumption ratios, and business-use records during an app-store refund review. This control is off by default, may be revoked at any time, and does not affect purchases. The initial version does not send IP addresses or precise location for this purpose.",
             "With regulators, law enforcement, or professional advisers when required by law, needed to protect people or public safety, investigate abuse, or defend Echo's rights.",
             "As part of a merger, acquisition, financing, or asset transfer, with appropriate safeguards and as required by law.",
           ],

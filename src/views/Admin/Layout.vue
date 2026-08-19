@@ -11,6 +11,10 @@
           <AppIcon :path="mdiAlertOctagonOutline" />
           <span>举报处理</span>
         </RouterLink>
+        <RouterLink to="/admin/billing" @click="menuOpen = false">
+          <AppIcon :path="mdiCreditCardRefreshOutline" />
+          <span>退款与支付风控</span>
+        </RouterLink>
         <RouterLink to="/admin/feedback" @click="menuOpen = false">
           <AppIcon :path="mdiMessageTextOutline" />
           <span>意见与反馈</span>
@@ -45,6 +49,7 @@ import {
   mdiAlertOctagonOutline,
   mdiClose,
   mdiCogOutline,
+  mdiCreditCardRefreshOutline,
   mdiMenu,
   mdiMessageTextOutline,
 } from "@mdi/js"
