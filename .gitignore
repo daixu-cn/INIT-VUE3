@@ -32,3 +32,9 @@ coverage
 src/typings/components.d.ts
 src/typings/auto-imports.d.ts
 src/typings/permission-type.d.ts
+
+# Local AI assistant configuration
+/.claude/
+/.codex/
+/AGENTS.md
+/CLAUDE.md

@@ -11,6 +11,10 @@
           <AppIcon :path="mdiAlertOctagonOutline" />
           <span>举报处理</span>
         </RouterLink>
+        <RouterLink to="/admin/character-communities" @click="menuOpen = false">
+          <AppIcon :path="mdiAccountGroupOutline" />
+          <span>角色真人社区</span>
+        </RouterLink>
         <RouterLink to="/admin/billing" @click="menuOpen = false">
           <AppIcon :path="mdiCreditCardRefreshOutline" />
           <span>退款与支付风控</span>
@@ -18,6 +22,14 @@
         <RouterLink to="/admin/feedback" @click="menuOpen = false">
           <AppIcon :path="mdiMessageTextOutline" />
           <span>意见与反馈</span>
+        </RouterLink>
+        <RouterLink to="/admin/discovery-facets" @click="menuOpen = false">
+          <AppIcon :path="mdiTagMultipleOutline" />
+          <span>发现分类</span>
+        </RouterLink>
+        <RouterLink to="/admin/system-stickers" @click="menuOpen = false">
+          <AppIcon :path="mdiStickerEmoji" />
+          <span>系统表情</span>
         </RouterLink>
         <RouterLink to="/admin/app-operations" @click="menuOpen = false">
           <AppIcon :path="mdiCogOutline" />
@@ -46,12 +58,15 @@
 
 <script setup lang="ts">
 import {
+  mdiAccountGroupOutline,
   mdiAlertOctagonOutline,
   mdiClose,
   mdiCogOutline,
   mdiCreditCardRefreshOutline,
   mdiMenu,
   mdiMessageTextOutline,
+  mdiStickerEmoji,
+  mdiTagMultipleOutline,
 } from "@mdi/js"
 import { ref } from "vue"
 import { useRouter } from "vue-router"

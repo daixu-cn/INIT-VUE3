@@ -150,6 +150,111 @@
             </div>
           </dl>
 
+          <section
+            v-if="
+              selectedReport.targetType === 'STORY_SCENE_VERSION' &&
+              isStorySnapshot(selectedReport.targetSnapshot)
+            "
+            class="target-snapshot"
+          >
+            <div class="snapshot-heading">
+              <div>
+                <span>剧情版本快照</span>
+                <h3>{{ selectedReport.targetSnapshot.title }}</h3>
+              </div>
+              <span
+                class="availability-chip"
+                :data-status="selectedReport.targetSnapshot.availability"
+              >
+                {{ availabilityLabel(selectedReport.targetSnapshot.availability) }}
+              </span>
+            </div>
+            <dl>
+              <div>
+                <dt>角色</dt>
+                <dd>{{ selectedReport.targetSnapshot.characterName || "—" }}</dd>
+              </div>
+              <div>
+                <dt>创作者</dt>
+                <dd>
+                  {{
+                    selectedReport.targetSnapshot.author.displayName ||
+                    selectedReport.targetSnapshot.author.email
+                  }}
+                </dd>
+              </div>
+              <div>
+                <dt>版本</dt>
+                <dd>V{{ selectedReport.targetSnapshot.versionNumber }}</dd>
+              </div>
+              <div>
+                <dt>发布时间</dt>
+                <dd>{{ formatDate(selectedReport.targetSnapshot.publishedAt, true) }}</dd>
+              </div>
+            </dl>
+            <div class="snapshot-content">
+              <h4>场景简介</h4>
+              <p>{{ selectedReport.targetSnapshot.content.synopsis || "未填写" }}</p>
+              <h4>故事前提</h4>
+              <p>{{ selectedReport.targetSnapshot.content.premise || "未填写" }}</p>
+              <h4>用户身份</h4>
+              <p>{{ selectedReport.targetSnapshot.content.userRole || "未填写" }}</p>
+              <details>
+                <summary>查看完整公开内容与机器审核结果</summary>
+                <pre>{{ formatSnapshot(selectedReport.targetSnapshot) }}</pre>
+              </details>
+            </div>
+          </section>
+
+          <section
+            v-else-if="isCommunitySnapshot(selectedReport.targetSnapshot)"
+            class="target-snapshot"
+          >
+            <div class="snapshot-heading">
+              <div>
+                <span>真人社区审核快照</span>
+                <h3>{{ selectedReport.targetSnapshot.characterName || "角色社区" }}</h3>
+              </div>
+              <span class="availability-chip" :data-status="selectedReport.targetSnapshot.status">
+                {{ selectedReport.targetSnapshot.status }}
+              </span>
+            </div>
+            <dl>
+              <div>
+                <dt>角色</dt>
+                <dd>{{ selectedReport.targetSnapshot.characterName || "—" }}</dd>
+              </div>
+              <div>
+                <dt>社区</dt>
+                <dd>
+                  {{
+                    selectedReport.targetSnapshot.characterCommunityId || selectedReport.targetId
+                  }}
+                </dd>
+              </div>
+              <div v-if="selectedReport.targetSnapshot.authorDisplayName">
+                <dt>内容作者</dt>
+                <dd>{{ selectedReport.targetSnapshot.authorDisplayName }}</dd>
+              </div>
+              <div v-if="selectedReport.targetSnapshot.postId">
+                <dt>所在帖子</dt>
+                <dd>{{ selectedReport.targetSnapshot.postId }}</dd>
+              </div>
+            </dl>
+            <div v-if="selectedReport.targetSnapshot.title" class="snapshot-content">
+              <h4>帖子标题</h4>
+              <p>{{ selectedReport.targetSnapshot.title }}</p>
+            </div>
+            <div v-if="selectedReport.targetSnapshot.text" class="snapshot-content">
+              <h4>内容正文</h4>
+              <p>{{ selectedReport.targetSnapshot.text }}</p>
+            </div>
+            <div v-if="selectedReport.targetSnapshot.tags?.length" class="snapshot-content">
+              <h4>帖子标签</h4>
+              <p>{{ selectedReport.targetSnapshot.tags.map(tag => `#${tag}`).join(" ") }}</p>
+            </div>
+          </section>
+
           <section class="report-details">
             <h3>补充说明</h3>
             <p>{{ selectedReport.details || "举报人未填写补充说明。" }}</p>
@@ -174,6 +279,71 @@
               @click="handleReview('IN_REVIEW')"
             >
               标记处理中
+            </button>
+            <button
+              v-if="
+                selectedReport.targetType === 'STORY_SCENE_VERSION' &&
+                isStorySnapshot(selectedReport.targetSnapshot) &&
+                selectedReport.targetSnapshot.availability !== 'TAKEN_DOWN'
+              "
+              type="button"
+              class="take-down-action"
+              :disabled="processing"
+              @click="handleReview('RESOLVED', 'TAKE_DOWN')"
+            >
+              下架剧情
+            </button>
+            <button
+              v-if="
+                selectedReport.targetType === 'STORY_SCENE_VERSION' &&
+                isStorySnapshot(selectedReport.targetSnapshot) &&
+                selectedReport.targetSnapshot.availability === 'TAKEN_DOWN'
+              "
+              type="button"
+              class="restore-action"
+              :disabled="processing"
+              @click="handleReview('RESOLVED', 'RESTORE')"
+            >
+              复审并恢复
+            </button>
+            <button
+              v-if="
+                selectedReport.targetType === 'COMMUNITY_POST' &&
+                isCommunitySnapshot(selectedReport.targetSnapshot) &&
+                selectedReport.targetSnapshot.status === 'VISIBLE'
+              "
+              type="button"
+              class="take-down-action"
+              :disabled="processing || !reviewNote.trim()"
+              @click="handleCommunityModeration('HIDE_POST')"
+            >
+              隐藏帖子并处理
+            </button>
+            <button
+              v-if="
+                selectedReport.targetType === 'COMMUNITY_POST_COMMENT' &&
+                isCommunitySnapshot(selectedReport.targetSnapshot) &&
+                selectedReport.targetSnapshot.status === 'VISIBLE'
+              "
+              type="button"
+              class="take-down-action"
+              :disabled="processing || !reviewNote.trim()"
+              @click="handleCommunityModeration('HIDE_COMMENT')"
+            >
+              隐藏评论并处理
+            </button>
+            <button
+              v-if="
+                selectedReport.targetType === 'CHARACTER_COMMUNITY' &&
+                isCommunitySnapshot(selectedReport.targetSnapshot) &&
+                selectedReport.targetSnapshot.status !== 'SUSPENDED'
+              "
+              type="button"
+              class="take-down-action"
+              :disabled="processing || !reviewNote.trim()"
+              @click="handleCommunityModeration('SUSPEND_COMMUNITY')"
+            >
+              暂停社区并处理
             </button>
             <button
               type="button"
@@ -203,6 +373,11 @@ import { mdiCheckCircleOutline, mdiChevronRight, mdiClose, mdiLoading, mdiRefres
 import { computed, onMounted, reactive, ref } from "vue"
 
 import AppIcon from "@/components/AppIcon.vue"
+import {
+  moderateCharacterCommunityComment,
+  moderateCharacterCommunityPost,
+  updateCharacterCommunityStatus,
+} from "@/server/api/character-communities"
 import { listReports, reviewReport } from "@/server/api/reports"
 import { snackbar } from "@/tools/snackbar"
 
@@ -218,7 +393,11 @@ const targetTypes = [
   "CHARACTER_INSTANCE",
   "MESSAGE",
   "CONVERSATION",
-  "CHARACTER_COMMENT",
+  "AUTHOR_MESSAGE",
+  "STORY_SCENE_VERSION",
+  "CHARACTER_COMMUNITY",
+  "COMMUNITY_POST",
+  "COMMUNITY_POST_COMMENT",
 ]
 
 const filters = reactive<Model.Report.ListParams>({ status: "ALL", targetType: "", limit: 20 })
@@ -240,6 +419,7 @@ const displayedReports = computed(() => {
       report.targetId,
       report.targetType,
       report.reporter.email,
+      ...snapshotSearchTerms(report.targetSnapshot),
     ].some(value => value?.toLocaleLowerCase().includes(keyword)),
   )
 })
@@ -255,8 +435,49 @@ function targetLabel(type: string) {
       CHARACTER_INSTANCE: "角色实例",
       MESSAGE: "单条消息",
       CONVERSATION: "完整对话",
-      CHARACTER_COMMENT: "角色评论",
+      AUTHOR_MESSAGE: "作者留言",
+      STORY_SCENE_VERSION: "剧情版本",
+      CHARACTER_COMMUNITY: "角色真人社区",
+      COMMUNITY_POST: "社区帖子",
+      COMMUNITY_POST_COMMENT: "帖子评论",
     }[type] ?? type
+  )
+}
+
+function isStorySnapshot(
+  snapshot: Model.Report.Item["targetSnapshot"],
+): snapshot is Model.Report.StorySceneTargetSnapshot {
+  return Boolean(snapshot && "storySceneId" in snapshot)
+}
+
+function isCommunitySnapshot(
+  snapshot: Model.Report.Item["targetSnapshot"],
+): snapshot is Model.Report.CommunityTargetSnapshot {
+  return Boolean(snapshot && "characterDefinitionId" in snapshot && !("storySceneId" in snapshot))
+}
+
+function snapshotSearchTerms(snapshot: Model.Report.Item["targetSnapshot"]) {
+  if (!snapshot) return []
+  if (isStorySnapshot(snapshot)) return [snapshot.title, snapshot.characterName]
+  return [
+    snapshot.characterName,
+    snapshot.title,
+    snapshot.text,
+    snapshot.authorDisplayName,
+    snapshot.postId,
+    ...(snapshot.tags ?? []),
+  ]
+}
+
+function availabilityLabel(status: Model.Report.StorySceneTargetSnapshot["availability"]) {
+  return { ACTIVE: "公开中", TAKEN_DOWN: "已下架", ARCHIVED: "已归档" }[status]
+}
+
+function formatSnapshot(snapshot: Model.Report.StorySceneTargetSnapshot) {
+  return JSON.stringify(
+    { content: snapshot.content, moderationResult: snapshot.moderationResult },
+    null,
+    2,
   )
 }
 
@@ -303,23 +524,77 @@ function closeDrawer() {
   reviewNote.value = ""
 }
 
-async function handleReview(status: Model.Report.ReviewParams["status"]) {
+async function handleReview(
+  status: Model.Report.ReviewParams["status"],
+  publicationAction: Model.Report.ReviewParams["publicationAction"] = "NONE",
+) {
   if (!selectedReport.value || processing.value) return
   processing.value = true
   try {
     const response = await reviewReport(selectedReport.value.reportId, {
       status,
       note: reviewNote.value.trim() || undefined,
+      publicationAction,
     })
     const updated = response.data
 
     const index = reports.value.findIndex(report => report.reportId === updated.reportId)
-    if (index >= 0) reports.value[index] = updated
+    if (index >= 0) {
+      const currentSnapshot = selectedReport.value.targetSnapshot
+      reports.value[index] = {
+        ...selectedReport.value,
+        ...updated,
+        targetSnapshot: isStorySnapshot(currentSnapshot)
+          ? {
+              ...currentSnapshot,
+              availability:
+                publicationAction === "TAKE_DOWN"
+                  ? "TAKEN_DOWN"
+                  : publicationAction === "RESTORE"
+                    ? "ACTIVE"
+                    : currentSnapshot.availability,
+            }
+          : (currentSnapshot ?? null),
+      }
+    }
     snackbar.success(
       status === "RESOLVED" ? "举报已处理" : status === "DISMISSED" ? "举报已驳回" : "已标记处理中",
     )
     closeDrawer()
     if (filters.status !== "ALL" && filters.status !== status) await loadReports(true)
+  } finally {
+    processing.value = false
+  }
+}
+
+async function handleCommunityModeration(
+  action: "HIDE_POST" | "HIDE_COMMENT" | "SUSPEND_COMMUNITY",
+) {
+  const report = selectedReport.value
+  const snapshot = report?.targetSnapshot
+  if (!report || !isCommunitySnapshot(snapshot) || processing.value) return
+  processing.value = true
+  try {
+    const reason = reviewNote.value.trim()
+    if (action === "HIDE_POST") {
+      if (!snapshot.characterCommunityId) throw new Error("举报快照缺少社区编号")
+      await moderateCharacterCommunityPost(snapshot.characterCommunityId, report.targetId, {
+        action: "HIDE",
+        reason,
+      })
+    } else if (action === "HIDE_COMMENT") {
+      if (!snapshot.characterCommunityId) throw new Error("举报快照缺少社区编号")
+      await moderateCharacterCommunityComment(snapshot.characterCommunityId, report.targetId, {
+        action: "HIDE",
+        reason,
+      })
+    } else {
+      await updateCharacterCommunityStatus(report.targetId, { status: "SUSPENDED", reason })
+    }
+    await reviewReport(report.reportId, { status: "RESOLVED", note: reason })
+    snackbar.success("社区内容已处置，举报已结案")
+    closeDrawer()
+    await loadReports(true)
   } finally {
     processing.value = false
   }
@@ -637,6 +912,74 @@ onMounted(() => loadReports(true))
   font-size: 0.75rem;
 }
 
+.target-snapshot {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #dce5e1;
+  background: #f8faf9;
+}
+
+.snapshot-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.snapshot-heading span {
+  color: #7b8783;
+  font-size: 0.7rem;
+}
+
+.snapshot-heading h3 {
+  margin: 0.3rem 0 0;
+  font-size: 1.15rem;
+}
+
+.target-snapshot dl {
+  margin: 1rem 0;
+  background: #fff;
+}
+
+.snapshot-content h4 {
+  margin: 1rem 0 0.3rem;
+  color: #53615d;
+  font-size: 0.72rem;
+}
+
+.snapshot-content p {
+  margin: 0;
+  color: #45524f;
+  line-height: 1.65;
+}
+
+.snapshot-content details {
+  margin-top: 1rem;
+}
+
+.snapshot-content pre {
+  max-height: 300px;
+  padding: 0.8rem;
+  overflow: auto;
+  background: #17201e;
+  color: #e8f2ee;
+  font-size: 0.7rem;
+  white-space: pre-wrap;
+}
+
+.availability-chip {
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  background: #e1f4eb;
+  color: #347663 !important;
+  white-space: nowrap;
+}
+
+.availability-chip[data-status="TAKEN_DOWN"] {
+  background: #f8e5e2;
+  color: #a3483e !important;
+}
+
 .report-details p {
   margin: 0;
   color: #505d5a;
@@ -691,6 +1034,18 @@ onMounted(() => loadReports(true))
   border: 1px solid var(--color-echo-accent);
   background: var(--color-echo-accent);
   color: #fff;
+}
+
+.take-down-action {
+  border: 1px solid #a3483e;
+  background: #a3483e;
+  color: #fff;
+}
+
+.restore-action {
+  border: 1px solid #347663;
+  background: #e7f4ee;
+  color: #286451;
 }
 
 .spinning {

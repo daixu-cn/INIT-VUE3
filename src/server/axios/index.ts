@@ -6,9 +6,14 @@ import { snackbar } from "@/tools/snackbar"
 
 import type { HTTPRequestConfig, InternalHTTPRequestConfig } from "./types"
 
-const SUCCESS_CODE = 200
+const SUCCESS_CODE_MIN = 200
+const SUCCESS_CODE_MAX = 300
 const AUTH_ERROR_CODES = new Set([401, 403])
 const DEFAULT_ERROR_MESSAGE = "请求失败，请稍后重试"
+
+function isSuccessCode(code: number) {
+  return code >= SUCCESS_CODE_MIN && code < SUCCESS_CODE_MAX
+}
 
 class HTTP {
   // axios实例
@@ -66,7 +71,7 @@ class HTTP {
           return this.retryWithRefresh(response, this.normalizeMessage(message))
         }
 
-        if (code !== SUCCESS_CODE) {
+        if (!isSuccessCode(code)) {
           const errorMessage = this.normalizeMessage(message)
           if (!requestConfig.skipErrorHandler) snackbar.error(errorMessage)
 
@@ -151,7 +156,7 @@ class HTTP {
         )
         .then(response => {
           const { code, data, message } = response.data
-          if (code !== SUCCESS_CODE) throw new Error(this.normalizeMessage(message))
+          if (!isSuccessCode(code)) throw new Error(this.normalizeMessage(message))
 
           useStore().user.setSession(data)
           return data.accessToken
