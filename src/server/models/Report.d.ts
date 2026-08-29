@@ -15,33 +15,7 @@ declare namespace Model {
       status: Status
       createdAt: string
       updatedAt: string
-      targetSnapshot?: StorySceneTargetSnapshot | CommunityTargetSnapshot | null
-    }
-
-    interface StorySceneTargetSnapshot {
-      availability: "ACTIVE" | "TAKEN_DOWN" | "ARCHIVED"
-      author: {
-        displayName?: string | null
-        email: string
-        userId: string
-      }
-      characterName?: string | null
-      content: {
-        boundaries: unknown
-        contentDescriptors: unknown
-        endingConditions: unknown
-        fixedFacts: unknown
-        objective?: string | null
-        premise: string
-        synopsis: string
-        userRole: string
-        worldSetting: string
-      }
-      moderationResult: unknown
-      publishedAt: string
-      storySceneId: string
-      title: string
-      versionNumber: number
+      targetSnapshot?: CommunityTargetSnapshot | null
     }
 
     interface CommunityTargetSnapshot {

@@ -151,63 +151,7 @@
           </dl>
 
           <section
-            v-if="
-              selectedReport.targetType === 'STORY_SCENE_VERSION' &&
-              isStorySnapshot(selectedReport.targetSnapshot)
-            "
-            class="target-snapshot"
-          >
-            <div class="snapshot-heading">
-              <div>
-                <span>剧情版本快照</span>
-                <h3>{{ selectedReport.targetSnapshot.title }}</h3>
-              </div>
-              <span
-                class="availability-chip"
-                :data-status="selectedReport.targetSnapshot.availability"
-              >
-                {{ availabilityLabel(selectedReport.targetSnapshot.availability) }}
-              </span>
-            </div>
-            <dl>
-              <div>
-                <dt>角色</dt>
-                <dd>{{ selectedReport.targetSnapshot.characterName || "—" }}</dd>
-              </div>
-              <div>
-                <dt>创作者</dt>
-                <dd>
-                  {{
-                    selectedReport.targetSnapshot.author.displayName ||
-                    selectedReport.targetSnapshot.author.email
-                  }}
-                </dd>
-              </div>
-              <div>
-                <dt>版本</dt>
-                <dd>V{{ selectedReport.targetSnapshot.versionNumber }}</dd>
-              </div>
-              <div>
-                <dt>发布时间</dt>
-                <dd>{{ formatDate(selectedReport.targetSnapshot.publishedAt, true) }}</dd>
-              </div>
-            </dl>
-            <div class="snapshot-content">
-              <h4>场景简介</h4>
-              <p>{{ selectedReport.targetSnapshot.content.synopsis || "未填写" }}</p>
-              <h4>故事前提</h4>
-              <p>{{ selectedReport.targetSnapshot.content.premise || "未填写" }}</p>
-              <h4>用户身份</h4>
-              <p>{{ selectedReport.targetSnapshot.content.userRole || "未填写" }}</p>
-              <details>
-                <summary>查看完整公开内容与机器审核结果</summary>
-                <pre>{{ formatSnapshot(selectedReport.targetSnapshot) }}</pre>
-              </details>
-            </div>
-          </section>
-
-          <section
-            v-else-if="isCommunitySnapshot(selectedReport.targetSnapshot)"
+            v-if="isCommunitySnapshot(selectedReport.targetSnapshot)"
             class="target-snapshot"
           >
             <div class="snapshot-heading">
@@ -279,32 +223,6 @@
               @click="handleReview('IN_REVIEW')"
             >
               标记处理中
-            </button>
-            <button
-              v-if="
-                selectedReport.targetType === 'STORY_SCENE_VERSION' &&
-                isStorySnapshot(selectedReport.targetSnapshot) &&
-                selectedReport.targetSnapshot.availability !== 'TAKEN_DOWN'
-              "
-              type="button"
-              class="take-down-action"
-              :disabled="processing"
-              @click="handleReview('RESOLVED', 'TAKE_DOWN')"
-            >
-              下架剧情
-            </button>
-            <button
-              v-if="
-                selectedReport.targetType === 'STORY_SCENE_VERSION' &&
-                isStorySnapshot(selectedReport.targetSnapshot) &&
-                selectedReport.targetSnapshot.availability === 'TAKEN_DOWN'
-              "
-              type="button"
-              class="restore-action"
-              :disabled="processing"
-              @click="handleReview('RESOLVED', 'RESTORE')"
-            >
-              复审并恢复
             </button>
             <button
               v-if="
@@ -394,7 +312,6 @@ const targetTypes = [
   "MESSAGE",
   "CONVERSATION",
   "AUTHOR_MESSAGE",
-  "STORY_SCENE_VERSION",
   "CHARACTER_COMMUNITY",
   "COMMUNITY_POST",
   "COMMUNITY_POST_COMMENT",
@@ -436,7 +353,6 @@ function targetLabel(type: string) {
       MESSAGE: "单条消息",
       CONVERSATION: "完整对话",
       AUTHOR_MESSAGE: "作者留言",
-      STORY_SCENE_VERSION: "剧情版本",
       CHARACTER_COMMUNITY: "角色真人社区",
       COMMUNITY_POST: "社区帖子",
       COMMUNITY_POST_COMMENT: "帖子评论",
@@ -444,21 +360,14 @@ function targetLabel(type: string) {
   )
 }
 
-function isStorySnapshot(
-  snapshot: Model.Report.Item["targetSnapshot"],
-): snapshot is Model.Report.StorySceneTargetSnapshot {
-  return Boolean(snapshot && "storySceneId" in snapshot)
-}
-
 function isCommunitySnapshot(
   snapshot: Model.Report.Item["targetSnapshot"],
 ): snapshot is Model.Report.CommunityTargetSnapshot {
-  return Boolean(snapshot && "characterDefinitionId" in snapshot && !("storySceneId" in snapshot))
+  return Boolean(snapshot && "characterDefinitionId" in snapshot)
 }
 
 function snapshotSearchTerms(snapshot: Model.Report.Item["targetSnapshot"]) {
   if (!snapshot) return []
-  if (isStorySnapshot(snapshot)) return [snapshot.title, snapshot.characterName]
   return [
     snapshot.characterName,
     snapshot.title,
@@ -467,18 +376,6 @@ function snapshotSearchTerms(snapshot: Model.Report.Item["targetSnapshot"]) {
     snapshot.postId,
     ...(snapshot.tags ?? []),
   ]
-}
-
-function availabilityLabel(status: Model.Report.StorySceneTargetSnapshot["availability"]) {
-  return { ACTIVE: "公开中", TAKEN_DOWN: "已下架", ARCHIVED: "已归档" }[status]
-}
-
-function formatSnapshot(snapshot: Model.Report.StorySceneTargetSnapshot) {
-  return JSON.stringify(
-    { content: snapshot.content, moderationResult: snapshot.moderationResult },
-    null,
-    2,
-  )
 }
 
 function formatDate(value: string, detailed = false) {
@@ -544,17 +441,7 @@ async function handleReview(
       reports.value[index] = {
         ...selectedReport.value,
         ...updated,
-        targetSnapshot: isStorySnapshot(currentSnapshot)
-          ? {
-              ...currentSnapshot,
-              availability:
-                publicationAction === "TAKE_DOWN"
-                  ? "TAKEN_DOWN"
-                  : publicationAction === "RESTORE"
-                    ? "ACTIVE"
-                    : currentSnapshot.availability,
-            }
-          : (currentSnapshot ?? null),
+        targetSnapshot: currentSnapshot ?? null,
       }
     }
     snackbar.success(
