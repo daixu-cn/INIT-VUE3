@@ -36,5 +36,6 @@ src/typings/permission-type.d.ts
 # Local AI assistant configuration
 /.claude/
 /.codex/
+/.gitnexus/
 /AGENTS.md
 /CLAUDE.md
