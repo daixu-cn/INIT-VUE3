@@ -13,11 +13,11 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "architecture:check": "node scripts/check-source-size.mjs && node scripts/check-style-tokens.mjs",
-    "format:check": "prettier --check src scripts config vite.config.ts tsconfig*.json .github package.json eslint.config.mjs --ignore-unknown && prettier --check docs --ignore-path /dev/null",
+    "format:check": "prettier --check src scripts config vite.config.ts tsconfig*.json .github package.json eslint.config.mjs --ignore-unknown && prettier --check docs --ignore-path /dev/null --no-error-on-unmatched-pattern",
     "lint:check": "eslint . --max-warnings=0",
     "quality": "pnpm format:check && pnpm lint:check && pnpm type-check && pnpm architecture:check && pnpm build",
     "lint": "eslint . --fix",
-    "prettier": "prettier --write src scripts config vite.config.ts tsconfig*.json .github package.json eslint.config.mjs --ignore-unknown && prettier --write docs --ignore-path /dev/null",
+    "prettier": "prettier --write src scripts config vite.config.ts tsconfig*.json .github package.json eslint.config.mjs --ignore-unknown && prettier --write docs --ignore-path /dev/null --no-error-on-unmatched-pattern",
     "commit": "git-cz",
     "husky-install": "pnpm exec husky init && echo 'pnpm quality' > .husky/pre-commit && echo 'pnpm exec commitlint --edit \"$1\"' > .husky/commit-msg",
     "prepare": "husky"

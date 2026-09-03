@@ -1,6 +1,6 @@
 interface ImportMetaEnv {
   /** App Store 下载地址 */
-  readonly VITE_APP_APP_STORE_URL?: string
+  readonly VITE_APP_APP_STORE_URL: string
   /** 预览端口 */
   readonly VITE_APP_PORT: string
   /** 站点标题 */
@@ -16,9 +16,9 @@ interface ImportMetaEnv {
   /** 服务请求地址 */
   readonly VITE_APP_BASE_API: string
   /** R2 品牌资源目录 */
-  readonly VITE_APP_BRAND_ASSET_BASE_URL?: string
+  readonly VITE_APP_BRAND_ASSET_BASE_URL: string
   /** Google Play 下载地址 */
-  readonly VITE_APP_GOOGLE_PLAY_URL?: string
+  readonly VITE_APP_GOOGLE_PLAY_URL: string
 }
 
 interface ImportMeta {
