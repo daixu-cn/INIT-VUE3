@@ -27,10 +27,6 @@
           <AppIcon :path="mdiTagMultipleOutline" />
           <span>发现分类</span>
         </RouterLink>
-        <RouterLink to="/admin/system-stickers" @click="menuOpen = false">
-          <AppIcon :path="mdiStickerEmoji" />
-          <span>系统表情</span>
-        </RouterLink>
         <RouterLink to="/admin/app-operations" @click="menuOpen = false">
           <AppIcon :path="mdiCogOutline" />
           <span>应用运维</span>
@@ -65,7 +61,6 @@ import {
   mdiCreditCardRefreshOutline,
   mdiMenu,
   mdiMessageTextOutline,
-  mdiStickerEmoji,
   mdiTagMultipleOutline,
 } from "@mdi/js"
 import { ref } from "vue"

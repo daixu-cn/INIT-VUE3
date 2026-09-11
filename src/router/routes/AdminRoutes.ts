@@ -38,12 +38,6 @@ const AdminRoutes: Readonly<RouteRecordRaw[]> = [
         meta: { title: "发现分类 · Echo 管理后台", auth: true },
       },
       {
-        path: "system-stickers",
-        name: "AdminSystemStickers",
-        component: () => import("@/views/Admin/SystemStickers.vue"),
-        meta: { title: "系统表情 · Echo 管理后台", auth: true },
-      },
-      {
         path: "app-operations",
         name: "AdminAppOperations",
         component: () => import("@/views/Admin/AppOperations.vue"),

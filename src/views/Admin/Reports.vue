@@ -150,54 +150,7 @@
             </div>
           </dl>
 
-          <section
-            v-if="isCommunitySnapshot(selectedReport.targetSnapshot)"
-            class="target-snapshot"
-          >
-            <div class="snapshot-heading">
-              <div>
-                <span>真人社区审核快照</span>
-                <h3>{{ selectedReport.targetSnapshot.characterName || "角色社区" }}</h3>
-              </div>
-              <span class="availability-chip" :data-status="selectedReport.targetSnapshot.status">
-                {{ selectedReport.targetSnapshot.status }}
-              </span>
-            </div>
-            <dl>
-              <div>
-                <dt>角色</dt>
-                <dd>{{ selectedReport.targetSnapshot.characterName || "—" }}</dd>
-              </div>
-              <div>
-                <dt>社区</dt>
-                <dd>
-                  {{
-                    selectedReport.targetSnapshot.characterCommunityId || selectedReport.targetId
-                  }}
-                </dd>
-              </div>
-              <div v-if="selectedReport.targetSnapshot.authorDisplayName">
-                <dt>内容作者</dt>
-                <dd>{{ selectedReport.targetSnapshot.authorDisplayName }}</dd>
-              </div>
-              <div v-if="selectedReport.targetSnapshot.postId">
-                <dt>所在帖子</dt>
-                <dd>{{ selectedReport.targetSnapshot.postId }}</dd>
-              </div>
-            </dl>
-            <div v-if="selectedReport.targetSnapshot.title" class="snapshot-content">
-              <h4>帖子标题</h4>
-              <p>{{ selectedReport.targetSnapshot.title }}</p>
-            </div>
-            <div v-if="selectedReport.targetSnapshot.text" class="snapshot-content">
-              <h4>内容正文</h4>
-              <p>{{ selectedReport.targetSnapshot.text }}</p>
-            </div>
-            <div v-if="selectedReport.targetSnapshot.tags?.length" class="snapshot-content">
-              <h4>帖子标签</h4>
-              <p>{{ selectedReport.targetSnapshot.tags.map(tag => `#${tag}`).join(" ") }}</p>
-            </div>
-          </section>
+          <ReportTargetSnapshot :key="selectedReport.reportId" :report="selectedReport" />
 
           <section class="report-details">
             <h3>补充说明</h3>
@@ -298,6 +251,7 @@ import {
 } from "@/server/api/character-communities"
 import { listReports, reviewReport } from "@/server/api/reports"
 import { snackbar } from "@/tools/snackbar"
+import ReportTargetSnapshot from "@/views/Admin/ReportTargetSnapshot.vue"
 
 const statusOptions: Array<{ label: string; value: Model.Report.ListParams["status"] }> = [
   { label: "全部", value: "ALL" },
@@ -797,74 +751,6 @@ onMounted(() => loadReports(true))
   margin: 0 0 0.65rem;
   color: #50605c;
   font-size: 0.75rem;
-}
-
-.target-snapshot {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  border: 1px solid #dce5e1;
-  background: #f8faf9;
-}
-
-.snapshot-heading {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.snapshot-heading span {
-  color: #7b8783;
-  font-size: 0.7rem;
-}
-
-.snapshot-heading h3 {
-  margin: 0.3rem 0 0;
-  font-size: 1.15rem;
-}
-
-.target-snapshot dl {
-  margin: 1rem 0;
-  background: #fff;
-}
-
-.snapshot-content h4 {
-  margin: 1rem 0 0.3rem;
-  color: #53615d;
-  font-size: 0.72rem;
-}
-
-.snapshot-content p {
-  margin: 0;
-  color: #45524f;
-  line-height: 1.65;
-}
-
-.snapshot-content details {
-  margin-top: 1rem;
-}
-
-.snapshot-content pre {
-  max-height: 300px;
-  padding: 0.8rem;
-  overflow: auto;
-  background: #17201e;
-  color: #e8f2ee;
-  font-size: 0.7rem;
-  white-space: pre-wrap;
-}
-
-.availability-chip {
-  padding: 0.3rem 0.55rem;
-  border-radius: 999px;
-  background: #e1f4eb;
-  color: #347663 !important;
-  white-space: nowrap;
-}
-
-.availability-chip[data-status="TAKEN_DOWN"] {
-  background: #f8e5e2;
-  color: #a3483e !important;
 }
 
 .report-details p {

@@ -20,7 +20,8 @@ declare namespace Model {
 
     interface CommunityTargetSnapshot {
       characterCommunityId?: string
-      characterDefinitionId: string
+      characterDefinitionId?: string
+      targetAuthorUserId?: string
       characterName?: string | null
       status: string
       title?: string | null
@@ -49,6 +50,16 @@ declare namespace Model {
     interface ListData {
       items: Item[]
       nextCursor: string | null
+    }
+
+    interface Media {
+      mediaAssetId: string
+      kind: "IMAGE" | "AUDIO"
+      mimeType: string
+      url: string
+      expiresAt: string
+      durationMilliseconds?: number | null
+      transcript?: string | null
     }
 
     interface ListParams {

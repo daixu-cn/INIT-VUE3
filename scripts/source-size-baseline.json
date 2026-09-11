@@ -4,8 +4,7 @@
   "src/views/Admin/DiscoveryFacets.vue": 696,
   "src/views/Admin/Feedback.vue": 1032,
   "src/views/Admin/Login.vue": 602,
-  "src/views/Admin/Reports.vue": 1029,
-  "src/views/Admin/SystemStickers.vue": 1011,
+  "src/views/Admin/Reports.vue": 915,
   "src/views/Main/Home/Home.vue": 2237,
   "src/views/Main/Legal/LegalDocument.vue": 1067
 }

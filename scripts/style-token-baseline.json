@@ -8,8 +8,7 @@
   "src/views/Admin/Feedback.vue": 70,
   "src/views/Admin/Layout.vue": 14,
   "src/views/Admin/Login.vue": 36,
-  "src/views/Admin/Reports.vue": 74,
-  "src/views/Admin/SystemStickers.vue": 50,
+  "src/views/Admin/Reports.vue": 62,
   "src/views/Main/Home/Home.vue": 66,
   "src/views/Main/Legal/LegalDocument.vue": 15
 }
